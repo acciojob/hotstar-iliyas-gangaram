@@ -106,7 +106,7 @@ public int plan(int noOfScreen,SubscriptionType subType)
         int totalRevenue=0;
 
         for(Subscription s:allSub){
-            totalRevenue+=s.getTotalAmountPaid();
+            totalRevenue=totalRevenue+s.getTotalAmountPaid();
         }
 
         return totalRevenue;
