@@ -45,7 +45,7 @@ for(WebSeries ws:webSeries)
     {
         if(webST.equals(SubscriptionType.ELITE)&&st.equals(SubscriptionType.ELITE))
         {
-            count++;
+            count=count+1;
 
         }
         else if(webST.equals(SubscriptionType.PRO)&&(webST.equals(SubscriptionType.ELITE)|| webST.equals(SubscriptionType.PRO)))
