@@ -10,7 +10,6 @@ import com.driver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,24 +20,27 @@ public class SubscriptionService {
 
     @Autowired
     UserRepository userRepository;
-public int plan(int noOfScreen,SubscriptionType subType)
-{
-    int plan;
-    if(subType.equals(SubscriptionType.BASIC)){
-        plan=500+200*noOfScreen;
+
+    public int plan(int noOfScreen,SubscriptionType subType){
+        int plan;
+        if(subType.equals(SubscriptionType.BASIC)){
+            plan=500+200*noOfScreen;
+        }
+        if(subType.equals(SubscriptionType.PRO)){
+            plan=800+250*noOfScreen;
+        }   else{
+            plan=1000+350*noOfScreen;
+        }
+
+        return plan;
     }
-    if(subType.equals(SubscriptionType.PRO)){
-        plan=800+250*noOfScreen;
-    }   else{
-        plan=1000+350*noOfScreen;
-    }
 
-    return plan; //Save The subscription Object into the Db and return the total Amount that user has to pay
-
-
-
-}
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
+//        For Basic Plan : 500 + 200noOfScreensSubscribed
+//        For PRO Plan : 800 + 250noOfScreensSubscribed
+//        For ELITE Plan : 1000 + 350*noOfScreensSubscribed
+
+        //Save The subscription Object into the Db and return the total Amount that user has to pay
         User user=userRepository.findById(subscriptionEntryDto.getUserId()).get();
 
         Subscription subscription=new Subscription();
@@ -61,15 +63,13 @@ public int plan(int noOfScreen,SubscriptionType subType)
 
 
         return plan;
-
-       }
+    }
 
     public Integer upgradeSubscription(Integer userId)throws Exception{
 
         //If you are already at an ElITE subscription : then throw Exception ("Already the best Subscription")
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
-
         User user=userRepository.findById(userId).get();
         Subscription subscription=user.getSubscription();
 
@@ -93,8 +93,6 @@ public int plan(int noOfScreen,SubscriptionType subType)
 
 
         return subscription.getTotalAmountPaid()-currPlan;
-
-
     }
 
     public Integer calculateTotalRevenueOfHotstar(){
@@ -106,11 +104,10 @@ public int plan(int noOfScreen,SubscriptionType subType)
         int totalRevenue=0;
 
         for(Subscription s:allSub){
-            totalRevenue=totalRevenue+s.getTotalAmountPaid();
+            totalRevenue+=s.getTotalAmountPaid();
         }
 
         return totalRevenue;
-
     }
 
 }
